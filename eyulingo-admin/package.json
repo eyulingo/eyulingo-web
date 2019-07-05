@@ -15,7 +15,9 @@
     "element-ui": "^2.10.1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3"
+    "vue-element-extends": "^1.2.20",
+    "vue-router": "^3.0.3",
+    "xe-utils": "^1.9.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",

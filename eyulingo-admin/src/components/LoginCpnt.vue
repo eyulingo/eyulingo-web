@@ -52,7 +52,7 @@ export default {
       /*提交进行判断的函数 */
       submit:function(){
 		this.loading = true
-		let params = {'phone':this.form.name, 'password':this.form.password}
+		let params = {'adminName':this.form.name, 'password':this.form.password}
 		http.fetchPost('admin/login', params).then((data) => {
 			console.log(data)
 			if (data.data.Status=="admin_user") {

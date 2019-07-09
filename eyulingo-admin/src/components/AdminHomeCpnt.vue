@@ -1,48 +1,48 @@
 
 <template>
-
-    <el-row>
-        <el-col :span="24">
-            <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">
-                <el-table-column type="index"></el-table-column>
-                <el-table-column v-for="v in master_user.columns" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
-                    <template slot-scope="scope">
-                        <span v-if="v.field=='store_id'">{{scope.row[v.field]}}</span>
-                        <span v-else-if="scope.row.isSet">
-                            <el-input size="mini" placeholder="请输入内容" v-model="master_user.sel[v.field]">
-                            </el-input>
-                        </span>
-                        <span v-else>{{scope.row[v.field]}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" width="100">
-                    <template slot-scope="scope">
-                        <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,true)">
-                            {{scope.row.isSet?"保存":"修改"}}
-                        </span>
-                        <span v-if="!scope.row.isSet" class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="deleteMasterUser(scope.$index)">
-                            删除
-                        </span>
-                        <span v-else class="el-tag  el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,false)">
-                            取消
-                        </span>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-col>
-        <el-col :span="24">
-            <div class="el-table-add-row" style="width: 99.2%;" @click="addMasterUser()"><span>+ 添加</span></div>
-        </el-col>
-        <el-col :span="24">
-            <div class="el-table-add-row" style="width: 99.2%;" @click="readMasterUser()"><span>刷新</span></div>
-        </el-col>
-    </el-row>
-
+    <div>
+        <el-button @click="change(1)">店铺信息</el-button>
+        <el-button @click="change(2)">经销商信息</el-button>
+        <el-row>
+            <el-col :span="24">
+                <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">
+                    <el-table-column type="index"></el-table-column>
+                    <el-table-column v-for="v in is_store?master_user.columns_store:master_user.columns_dist" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
+                        <template slot-scope="scope">
+                            <span v-if="v.field=='store_id'">{{scope.row[v.field]}}</span>
+                            <span v-else-if="scope.row.isSet">
+                                <el-input size="mini" placeholder="请输入内容" v-model="master_user.sel[v.field]">
+                                </el-input>
+                            </span>
+                            <span v-else>{{scope.row[v.field]}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="100">
+                        <template slot-scope="scope">
+                            <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,true)">
+                                {{scope.row.isSet?"保存":"修改"}}
+                            </span>
+                            <span v-if="!scope.row.isSet" class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="deleteMasterUser(scope.$index)">
+                                删除
+                            </span>
+                            <span v-else class="el-tag  el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,false)">
+                                取消
+                            </span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+            <el-col :span="24" hidden=true>
+                <div class="el-table-add-row" style="width: 99.2%;" @click="addMasterUser()"><span>+ 添加</span></div>
+            </el-col>
+            <el-col :span="24">
+                <div class="el-table-add-row" style="width: 99.2%;" @click="readMasterUser()"><span>刷新</span></div>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
-import http from '../http.js'
-import axios from 'axios'
 
 var generateId = {
         _count: 1,
@@ -56,32 +56,27 @@ export default {
         return {
             master_user: {
                 sel: null,//选中行
-                columns: [
-                    { field: "store_id", title: "店铺ID", width: 80 },
-                    { field: "name", title: "店铺名称", width: 80 },
-                    { field: "address", title: "店铺地址", width: 180 },
-                    { field: "starttime", title: "营业开始时间", width: 180 },
-                    { field: "endtime", title: "营业结束时间", width: 180 },
-                    { field: "store_image_id", title: "店铺图片地址", width: 180 },
+                columns_store: [
+                    { field: "store_id", title: "店铺ID", width: 120 },
+                    { field: "name", title: "店铺名称", width: 120 },
+                    { field: "address", title: "店铺地址"},
+                    { field: "starttime", title: "营业开始时间", width: 220 },
+                    { field: "endtime", title: "营业结束时间", width: 220 },
+                    //{ field: "store_image_id", title: "店铺图片地址", width: 180 },
+                    { field: "store_phone_nu", title: "店铺手机号",width: 120 }
+                ],
+                columns_dist: [
+                    { field: "store_id", title: "店铺ID", width: 120 },
                     { field: "location", title: "地理位置" },
-                    { field: "truename", title: "真实姓名", width: 80 },
-                    { field: "dist_phone_nu", title: "经销商联系方式", width: 90 },
-                    { field: "password", title: "密码", width: 80 },
-                    { field: "dist_image_id", title: "经销商图片", width: 180 },
-                    { field: "store_phone_nu", title: "店铺手机号",width: 80 }
+                    { field: "truename", title: "真实姓名", width: 120 },
+                    { field: "dist_phone_nu", title: "经销商联系方式", width: 120 },
+                    { field: "password", title: "密码", width: 120 },
+                    //{ field: "dist_image_id", title: "经销商图片", width: 180 },
                 ],
-                data: [
-                    { store_id: 123, name: "111", address: "123123",
-                      starttime: 1111, endtime: 1112, store_image_id: 111,
-                      location: "123123", truename: "123123", dist_phone_nu: 123,
-                      password: "qwfsd", dist_image_id: 123123, store_phone_nu: 123},
-                    { store_id: 123, name: "111", address: "123123",
-                      starttime: 1111, endtime: 1112, store_image_id: 111,
-                      location: "123123", truename: "123123", dist_phone_nu: 123,
-                      password: "qwfsd", dist_image_id: 123123, store_phone_nu: 123}
-                ],
+                data: [],
             },
-            loading: false
+            loading: false,
+            is_store: true
         }
 
     },
@@ -89,21 +84,27 @@ export default {
         this.readMasterUser()
     },
     methods: {
+        change(num) {
+            if (num==1) {
+                this.is_store = true
+            }else{
+                this.is_store = false
+            }
+        },
         //读取表格数据
         readMasterUser() {
             this.loading = true
-            let params = {}
-            http.fetchGet('admin/getstore', params)
-                .then((data) => {
-                    console.log(data)
-                    if (data.data.Status=="ok") {
-                        this.master_user.data = data.data.Values
-                        this.loading = false
-                    }
-                })
-                .finally(() => {
-                    this.loading = false
-                })
+            let request = new Request('http://47.103.15.32:8080/admin/getstore')
+            fetch(request, {
+                method: 'GET'
+            }).then((response)=>{
+                return response.text()
+            }).then((responseJson)=>{
+                console.log(responseJson)
+                this.master_user.data = JSON.parse(responseJson)
+            }).finally(()=>{
+                this.loading = false
+            })
 
             this.master_user.data.map(i => {
                 i.id = generateId.get();//模拟后台插入成功后有了id
@@ -163,33 +164,66 @@ export default {
                 for (let k in data) row[k] = data[k];
                 console.log(data)
                 this.loading = true
-                axios.all([http.fetchPost('admin/modifystore', {
-                    store_id: row.store_id,
-                    name: row.name,
-                    address: row.address,
-                    starttime: row.starttime,
-                    endtime: row.endtime,
-                    store_phone_nu: row.store_phone_nu
-                }),
-                http.fetchPost('admin/modifydist', {
-                    store_id: row.store_id,
-                    location: row.location,
-                    truename: row.truename,
-                    phone_nu: row.dist_phone_nu,
-                    password: row.password
-                })]).then(axios.spread((response1, response2)=>{
-                    this.loading = false
-                    if (response1.data.Status=="ok"&&response2.data.Status=="ok") {
-                        this.$message({
-                        type: 'success',
-                        message: "保存成功!"
+                if (this.is_store) {
+                    let request = new Request('http://47.103.15.32:8080/admin/modifystore')
+                    fetch(request, {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                            store_id: row.store_id,
+                            name: row.name,
+                            address: row.address,
+                            starttime: row.starttime,
+                            endtime: row.endtime,
+                            store_phone_nu: row.store_phone_nu
                         })
-                    }else{
-                        this.$message.warning("保存失败!")
-                    }
-                })).finally(()=>{
-                    this.loading = false
-                })
+                    }).then((response)=>{
+                        return response.text()
+                    }).then((responseJson)=>{
+                        console.log(responseJson)
+                        var res = JSON.parse(responseJson)
+                        if (res.status == "ok") {
+                            this.loading = false
+                            alert("修改店铺信息成功！")
+                        }else{
+                            this.loading = false
+                            alert("修改失败")
+                        }
+                    }).finally(()=>{
+                        this.loading = false
+                    })
+                }else{
+                    let request = new Request("http://47.103.15.32:8080/admin/modifydist")
+                    fetch(request, {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                            store_id: row.store_id,
+                            location: row.location,
+                            truename: row.truename,
+                            dist_phone_nu: row.dist_phone_nu,
+                            password: row.password
+                        })
+                    }).then((response)=>{
+                        return response.text()
+                    }).then((responseJson)=>{
+                        console.log(responseJson)
+                        var res = JSON.parse(responseJson)
+                        if (res.status == "ok") {
+                            this.loading = false
+                            alert("修改经销商信息成功！")
+                        }else{
+                            this.loading = false
+                            alert("修改失败")
+                        }
+                    }).finally(()=>{
+                        this.loading = false
+                    })
+                }
 
                 //然后这边重新读取表格数据
                 row.isSet = false;

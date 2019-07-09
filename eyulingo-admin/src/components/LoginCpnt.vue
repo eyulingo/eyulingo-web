@@ -35,8 +35,6 @@
 
 <script>
 
-import http from '../http.js'
-
 export default {
   name: 'Login',
   data () {
@@ -51,20 +49,36 @@ export default {
   methods:{
       /*提交进行判断的函数 */
       submit:function(){
-		this.loading = true
-		let params = {'adminName':this.form.name, 'password':this.form.password}
-		http.fetchPost('admin/login', params).then((data) => {
-			console.log(data)
-			if (data.data.Status=="admin_user") {
-				this.loading = false
-				alert("登录成功，您拥有管理员权限！")
-				this.$router.push({path:'/home'})
-			}
-			else{
-				this.loading = false
+
+        this.loading = true
+        let params = {'adminName':this.form.name, 'password':this.form.password}
+        let request = new Request('http://47.103.15.32:8080/admin/login')
+        //let header = new Headers().append('Content-Type', 'application/json;charset=UTF-8')
+        fetch(request, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(params)
+        }).then((response)=>{
+            console.log(response)
+            return response.text()
+        }).then((responseJson)=>{
+            //console.log(response.text())
+            console.log(responseJson)
+            var res = JSON.parse(responseJson)
+            if (res.status=="ok") {
+                this.loading = false
+                alert("登录成功，您拥有管理员权限！")
+                console.log(document.cookie)
+				//this.$router.push({path:'/admin'})
+            }else{
+                this.loading = false
 				alert("登录失败")
-			}
-		})
+            }
+        }).finally(()=>{
+            this.loading = false
+        })
       }
   },
 }

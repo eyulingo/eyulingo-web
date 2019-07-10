@@ -1,17 +1,23 @@
-
 <template>
-    <div>
-        <el-button @click="change(1)">店铺信息</el-button>
-        <el-button @click="change(2)">经销商信息</el-button>
-        <el-button @click="logout()">注销登录</el-button>
-        <el-row>
+<div>
+    <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <i v-else class="el-icon-circle-plus avatar-uploader-icon"></i>
+    </el-upload>
+    <el-row>
+        
+
             <el-col :span="24">
                 <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">
                     
-                    <el-table-column v-for="v in is_store?master_user.columns_store:master_user.columns_dist" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
+                    <el-table-column v-for="v in master_user.columns_dist" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
                         <template slot-scope="scope">
-                            <span v-if="v.field=='store_id'">{{scope.row[v.field]}}</span>
-                            <span v-else-if="scope.row.isSet">
+                            <span v-if="scope.row.isSet">
                                 <el-input size="mini" placeholder="请输入内容" v-model="master_user.sel[v.field]">
                                 </el-input>
                             </span>
@@ -40,99 +46,65 @@
                 <div class="el-table-add-row" style="width: 99.2%;" @click="readMasterUser()"><span>刷新</span></div>
             </el-col>
         </el-row>
-    </div>
+</div>
 </template>
 
 <script>
-import axios from 'axios';
-
-//axios.defaults.baseURL = 'http://47.103.15.32:8080'
-
-var generateId = {
-        _count: 1,
-        get(){return ((+new Date()) + "_" + (this._count++))}
-};
-
+//import axios from 'axios'
 export default {
-    //主要内容
-    name: 'adminForm',
+    name: 'distInfo',
     data() {
         return {
             master_user: {
                 sel: null,//选中行
-                columns_store: [
-                    { field: "store_id", title: "店铺ID", width: 120 },
-                    { field: "name", title: "店铺名称", width: 120 },
-                    { field: "address", title: "店铺地址"},
-                    { field: "starttime", title: "营业开始时间", width: 220 },
-                    { field: "endtime", title: "营业结束时间", width: 220 },
-                    //{ field: "store_image_id", title: "店铺图片地址", width: 180 },
-                    { field: "store_phone_nu", title: "店铺手机号",width: 120 }
-                ],
                 columns_dist: [
-                    { field: "store_id", title: "店铺ID", width: 120 },
+                    //{ field: "store_id", title: "店铺ID", width: 120 },
                     { field: "location", title: "地理位置" },
                     { field: "truename", title: "真实姓名", width: 120 },
                     { field: "dist_phone_nu", title: "经销商联系方式", width: 120 },
                     { field: "password", title: "密码", width: 120 },
                     //{ field: "dist_image_id", title: "经销商图片", width: 180 },
                 ],
-                data: [],
+                data: [{
+                    location: "aa",
+                    truename: "aa",
+                    dist_phone_nu: "11",
+                    password: "11"
+                }],
             },
             loading: false,
-            is_store: true
+            squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
         }
-
-    },
-    created () {
-        this.readMasterUser()
     },
     methods: {
-        logout() {
-            let axiosConfig = {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Access-Control-Allow-Origin': "*"
-            },
-            withCredentials: true,
-            }
-            axios.post('http://47.103.15.32:8080/admin/logout',{} ,axiosConfig).then((res)=>{
-                console.log(res.data)
-                this.$router.replace({path:'/'})
-            })
-        },
-        change(num) {
-            if (num==1) {
-                this.is_store = true
-            }else{
-                this.is_store = false
-            }
-        },
-        //读取表格数据
         readMasterUser() {
-            this.loading = true
+            // this.loading = true
 
-            axios.get('http://47.103.15.32:8080/admin/getstore', {
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    'Access-Control-Allow-Origin': "*"
-                },
-                withCredentials: true
-            }).then((res)=>{
-                console.log(res)
-                this.master_user.data = res.data
-            }).finally(()=>{
-                this.loading = false
-            })
+            // axios.get('http://localhost:8080/admin/getstore', {
+            //     withCredentials: true
+            // }).then((res)=>{
+            //     console.log(res)
+            //     this.master_user.data = res.data
+            // })
+            // let request = new Request('http://localhost:8080/admin/getstore')
+            // fetch(request, {
+            //     method: 'GET',
+            //     credentials: 'same-origin'
+            // }).then((response)=>{
+            //     return response.text()
+            // }).then((responseJson)=>{
+            //     console.log(responseJson)
+            //     this.master_user.data = JSON.parse(responseJson)
+            // }).finally(()=>{
+            //     this.loading = false
+            // })
 
             this.master_user.data.map(i => {
-                i.id = generateId.get();//模拟后台插入成功后有了id
+                i.id = 0;//模拟后台插入成功后有了id
                 i.isSet=false;//给后台返回数据添加`isSet`标识
                 i._temporary = true
                 return i;
-            })
-
-            this.loading = false
+            });
         },
         //添加账号
         addMasterUser() {
@@ -186,54 +158,69 @@ export default {
                 for (let k in data) row[k] = data[k];
                 console.log(row)
                 console.log(data)
-                this.loading = true
-                let axiosConfig = {
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8',
-                        'Access-Control-Allow-Origin': "*"
-                    },
-                    withCredentials: true
-                }
-                if (this.is_store) {
-                    let params = {
-                        store_id: row.store_id,
-                        name: row.name,
-                        address: row.address,
-                        starttime: row.starttime,
-                        endtime: row.endtime,
-                        store_phone_nu: row.store_phone_nu
-                    }
-                    axios.post('http://47.103.15.32:8080/admin/modifystore', params , axiosConfig). then((res)=>{
-                        if (res.data.status=="ok") {
-                            this.loading = false
-                            alert("修改店铺信息成功！")
-                        }else{
-                            this.loading = false
-                            alert("修改失败") 
-                        }
-                    }).finally(()=>{
-                        this.loading = false
-                    })
-                }else{
-                    let params = {
-                        store_id: row.store_id,
-                        location: row.location,
-                        truename: row.truename,
-                        dist_phone_nu: row.dist_phone_nu,
-                        password: row.password
-                    }
-                    axios.post('http://47.103.15.32:8080/admin/modifydist', params, axiosConfig).then((res)=>{
-                        if (res.data.status == "ok") {
-                            this.loading = false
-                            alert("修改经销商信息成功！")
-                        }else{
-                            this.loading = false
-                            alert("修改失败")
-                        }
-                    }).finally(()=>{
-                        this.loading = false
-                    })
-                }
+                // this.loading = true
+                // if (this.is_store) {
+                //     let request = new Request('http://localhost:8080/admin/modifystore')
+                //     fetch(request, {
+                //         method: 'POST',
+                //         headers: {
+                //             'content-type': 'application/json;charset=UTF-8'
+                //         },
+                //         body: JSON.stringify({
+                //             store_id: row.store_id,
+                //             name: row.name,
+                //             address: row.address,
+                //             starttime: row.starttime,
+                //             endtime: row.endtime,
+                //             store_phone_nu: row.store_phone_nu
+                //         }),
+                //         credentials: 'same-origin'
+                //     }).then((response)=>{
+                //         return response.text()
+                //     }).then((responseJson)=>{
+                //         console.log(responseJson)
+                //         var res = JSON.parse(responseJson)
+                //         if (res.status == "ok") {
+                //             this.loading = false
+                //             alert("修改店铺信息成功！")
+                //         }else{
+                //             this.loading = false
+                //             alert("修改失败")
+                //         }
+                //     }).finally(()=>{
+                //         this.loading = false
+                //     })
+                // }else{
+                //     let request = new Request("http://localhost:8080/admin/modifydist")
+                //     fetch(request, {
+                //         method: 'POST',
+                //         headers: {
+                //             'content-type': 'application/json;charset=UTF-8'
+                //         },
+                //         body: JSON.stringify({
+                //             store_id: row.store_id,
+                //             location: row.location,
+                //             truename: row.truename,
+                //             dist_phone_nu: row.dist_phone_nu,
+                //             password: row.password
+                //         }),
+                //         credentials: 'same-origin'
+                //     }).then((response)=>{
+                //         return response.text()
+                //     }).then((responseJson)=>{
+                //         console.log(responseJson)
+                //         var res = JSON.parse(responseJson)
+                //         if (res.status == "ok") {
+                //             this.loading = false
+                //             alert("修改经销商信息成功！")
+                //         }else{
+                //             this.loading = false
+                //             alert("修改失败")
+                //         }
+                //     }).finally(()=>{
+                //         this.loading = false
+                //     })
+                // }
 
                 //然后这边重新读取表格数据
                 row.isSet = false;
@@ -260,5 +247,29 @@ export default {
     display: flex;
     line-height: 34px;
 }
-</style>
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    margin-top: 60px;
+    font-size: 50px;
+    color: #8c939d;
+    width: 178px;
+    height: 125px;
+    text-align: center;
+    
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 
+</style>

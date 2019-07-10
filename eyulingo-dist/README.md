@@ -37,3 +37,34 @@ npm run test:unit
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+# Summary of Dist
+
+> left guide bar
+>
+> * dist info
+> * store info
+> * goods info
+> * orders
+
+> dist self info
+>
+> * ```/store/profile```
+> * ```/store/modify```
+> * ```/store/avatar```
+
+
+> store info
+> 
+> * ```store/mystoreinfo```
+> * ```store/modifystoreinfo```
+> * ```/store/cover```
+
+> goods info
+>
+> * ```store/goods```
+> * ```store/modifygood```
+> * ```store/addtag```
+> * 
+
+> orders

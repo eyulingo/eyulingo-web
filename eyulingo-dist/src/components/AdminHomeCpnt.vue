@@ -3,11 +3,10 @@
     <div>
         <el-button @click="change(1)">店铺信息</el-button>
         <el-button @click="change(2)">经销商信息</el-button>
-        <el-button @click="logout()">注销登录</el-button>
         <el-row>
             <el-col :span="24">
                 <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">
-                    
+                    <el-table-column type="index"></el-table-column>
                     <el-table-column v-for="v in is_store?master_user.columns_store:master_user.columns_dist" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
                         <template slot-scope="scope">
                             <span v-if="v.field=='store_id'">{{scope.row[v.field]}}</span>
@@ -44,9 +43,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-//axios.defaults.baseURL = 'http://47.103.15.32:8080'
 
 var generateId = {
         _count: 1,
@@ -88,19 +84,6 @@ export default {
         this.readMasterUser()
     },
     methods: {
-        logout() {
-            let axiosConfig = {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Access-Control-Allow-Origin': "*"
-            },
-            withCredentials: true,
-            }
-            axios.post('http://47.103.15.32:8080/admin/logout',{} ,axiosConfig).then((res)=>{
-                console.log(res.data)
-                this.$router.replace({path:'/'})
-            })
-        },
         change(num) {
             if (num==1) {
                 this.is_store = true
@@ -111,16 +94,14 @@ export default {
         //读取表格数据
         readMasterUser() {
             this.loading = true
-
-            axios.get('http://47.103.15.32:8080/admin/getstore', {
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    'Access-Control-Allow-Origin': "*"
-                },
-                withCredentials: true
-            }).then((res)=>{
-                console.log(res)
-                this.master_user.data = res.data
+            let request = new Request('http://47.103.15.32:8080/admin/getstore')
+            fetch(request, {
+                method: 'GET'
+            }).then((response)=>{
+                return response.text()
+            }).then((responseJson)=>{
+                console.log(responseJson)
+                this.master_user.data = JSON.parse(responseJson)
             }).finally(()=>{
                 this.loading = false
             })
@@ -130,9 +111,7 @@ export default {
                 i.isSet=false;//给后台返回数据添加`isSet`标识
                 i._temporary = true
                 return i;
-            })
-
-            this.loading = false
+            });
         },
         //添加账号
         addMasterUser() {
@@ -182,48 +161,59 @@ export default {
                 //项目是模拟请求操作  自己修改下
 
                 let data = JSON.parse(JSON.stringify(this.master_user.sel));
-                console.log(row)
                 for (let k in data) row[k] = data[k];
-                console.log(row)
                 console.log(data)
                 this.loading = true
-                let axiosConfig = {
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8',
-                        'Access-Control-Allow-Origin': "*"
-                    },
-                    withCredentials: true
-                }
                 if (this.is_store) {
-                    let params = {
-                        store_id: row.store_id,
-                        name: row.name,
-                        address: row.address,
-                        starttime: row.starttime,
-                        endtime: row.endtime,
-                        store_phone_nu: row.store_phone_nu
-                    }
-                    axios.post('http://47.103.15.32:8080/admin/modifystore', params , axiosConfig). then((res)=>{
-                        if (res.data.status=="ok") {
+                    let request = new Request('http://47.103.15.32:8080/admin/modifystore')
+                    fetch(request, {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                            store_id: row.store_id,
+                            name: row.name,
+                            address: row.address,
+                            starttime: row.starttime,
+                            endtime: row.endtime,
+                            store_phone_nu: row.store_phone_nu
+                        })
+                    }).then((response)=>{
+                        return response.text()
+                    }).then((responseJson)=>{
+                        console.log(responseJson)
+                        var res = JSON.parse(responseJson)
+                        if (res.status == "ok") {
                             this.loading = false
                             alert("修改店铺信息成功！")
                         }else{
                             this.loading = false
-                            alert("修改失败") 
+                            alert("修改失败")
                         }
                     }).finally(()=>{
                         this.loading = false
                     })
                 }else{
-                    let params = {
-                        store_id: row.store_id,
-                        location: row.location,
-                        truename: row.truename,
-                        dist_phone_nu: row.dist_phone_nu,
-                        password: row.password
-                    }
-                    axios.post('http://47.103.15.32:8080/admin/modifydist', params, axiosConfig).then((res)=>{
-                        if (res.data.status == "ok") {
+                    let request = new Request("http://47.103.15.32:8080/admin/modifydist")
+                    fetch(request, {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json;charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                            store_id: row.store_id,
+                            location: row.location,
+                            truename: row.truename,
+                            dist_phone_nu: row.dist_phone_nu,
+                            password: row.password
+                        })
+                    }).then((response)=>{
+                        return response.text()
+                    }).then((responseJson)=>{
+                        console.log(responseJson)
+                        var res = JSON.parse(responseJson)
+                        if (res.status == "ok") {
                             this.loading = false
                             alert("修改经销商信息成功！")
                         }else{

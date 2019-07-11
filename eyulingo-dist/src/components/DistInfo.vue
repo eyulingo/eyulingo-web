@@ -50,7 +50,7 @@
 </template>
 
 <script>
-//import axios from 'axios'
+import axios from 'axios'
 export default {
     name: 'distInfo',
     data() {
@@ -65,39 +65,31 @@ export default {
                     { field: "password", title: "密码", width: 120 },
                     //{ field: "dist_image_id", title: "经销商图片", width: 180 },
                 ],
-                data: [{
-                    location: "aa",
-                    truename: "aa",
-                    dist_phone_nu: "11",
-                    password: "11"
-                }],
+                data: [],
             },
             loading: false,
-            squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+            imageUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
         }
+    },
+    created() {
+        this.readMasterUser()
     },
     methods: {
         readMasterUser() {
-            // this.loading = true
-
-            // axios.get('http://localhost:8080/admin/getstore', {
-            //     withCredentials: true
-            // }).then((res)=>{
-            //     console.log(res)
-            //     this.master_user.data = res.data
-            // })
-            // let request = new Request('http://localhost:8080/admin/getstore')
-            // fetch(request, {
-            //     method: 'GET',
-            //     credentials: 'same-origin'
-            // }).then((response)=>{
-            //     return response.text()
-            // }).then((responseJson)=>{
-            //     console.log(responseJson)
-            //     this.master_user.data = JSON.parse(responseJson)
-            // }).finally(()=>{
-            //     this.loading = false
-            // })
+            this.loading = true
+            axios.get('http://localhost:8080/store/profile', {
+                withCredentials: true
+            }).then((res)=>{
+                console.log(res.data)
+                    this.master_user.data = []
+                    this.master_user.data.push(res.data)
+                
+                    
+                
+            }).finally(()=>{
+                this.loading = false
+            })
+            console.log(this.master_user.data)
 
             this.master_user.data.map(i => {
                 i.id = 0;//模拟后台插入成功后有了id
@@ -116,7 +108,7 @@ export default {
                      "location": "", "truename": "", "dist_phone_nu": "",
                      "password":"", "dist_image_id": "", "store_phone_nu": "",
                      "isSet": true, "_temporary": true };
-            this.master_user.data.push(j);
+            this.master_user.data.splice(0, 1, j);
             this.master_user.sel = JSON.parse(JSON.stringify(j));
         },
         //删除
@@ -158,69 +150,31 @@ export default {
                 for (let k in data) row[k] = data[k];
                 console.log(row)
                 console.log(data)
-                // this.loading = true
-                // if (this.is_store) {
-                //     let request = new Request('http://localhost:8080/admin/modifystore')
-                //     fetch(request, {
-                //         method: 'POST',
-                //         headers: {
-                //             'content-type': 'application/json;charset=UTF-8'
-                //         },
-                //         body: JSON.stringify({
-                //             store_id: row.store_id,
-                //             name: row.name,
-                //             address: row.address,
-                //             starttime: row.starttime,
-                //             endtime: row.endtime,
-                //             store_phone_nu: row.store_phone_nu
-                //         }),
-                //         credentials: 'same-origin'
-                //     }).then((response)=>{
-                //         return response.text()
-                //     }).then((responseJson)=>{
-                //         console.log(responseJson)
-                //         var res = JSON.parse(responseJson)
-                //         if (res.status == "ok") {
-                //             this.loading = false
-                //             alert("修改店铺信息成功！")
-                //         }else{
-                //             this.loading = false
-                //             alert("修改失败")
-                //         }
-                //     }).finally(()=>{
-                //         this.loading = false
-                //     })
-                // }else{
-                //     let request = new Request("http://localhost:8080/admin/modifydist")
-                //     fetch(request, {
-                //         method: 'POST',
-                //         headers: {
-                //             'content-type': 'application/json;charset=UTF-8'
-                //         },
-                //         body: JSON.stringify({
-                //             store_id: row.store_id,
-                //             location: row.location,
-                //             truename: row.truename,
-                //             dist_phone_nu: row.dist_phone_nu,
-                //             password: row.password
-                //         }),
-                //         credentials: 'same-origin'
-                //     }).then((response)=>{
-                //         return response.text()
-                //     }).then((responseJson)=>{
-                //         console.log(responseJson)
-                //         var res = JSON.parse(responseJson)
-                //         if (res.status == "ok") {
-                //             this.loading = false
-                //             alert("修改经销商信息成功！")
-                //         }else{
-                //             this.loading = false
-                //             alert("修改失败")
-                //         }
-                //     }).finally(()=>{
-                //         this.loading = false
-                //     })
-                // }
+                let params = {
+                    location: row.location,
+                    truename: row.truename,
+                    dist_phone_nu: row.dist_phone_nu,
+                    password: row.password
+                }
+                let axiosConfig = {
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'Access-Control-Allow-Origin': "*"
+                    },
+                    withCredentials: true
+                }
+                axios.post('http://localhost:8080/store/modifydist', params, axiosConfig).then((res)=>{
+                    if (res.data.status=="ok") {
+                        this.loading = false
+                        alert("修改成功！")
+                    }else{
+                        this.loading = false
+                        alert("修改失败")
+                    }
+                }).finally(()=>{
+                    this.loading = false
+                })
+                this.readMasterUser()
 
                 //然后这边重新读取表格数据
                 row.isSet = false;

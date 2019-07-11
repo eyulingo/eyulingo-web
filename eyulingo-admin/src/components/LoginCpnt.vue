@@ -37,7 +37,7 @@
 
 import axios from 'axios'
 
-//axios.defaults.baseURL = "http://47.103.15.32:8080"
+//axios.defaults.baseURL = "http://localhost:8080"
 
 export default {
   name: 'Login',
@@ -62,11 +62,15 @@ export default {
                 'Access-Control-Allow-Origin': "*"
             }
         }
-        axios.post('http://47.103.15.32:8080/admin/login', params, axiosConfig).then((res)=>{
+        axios.post('http://localhost:8080/admin/login', params, axiosConfig).then((res)=>{
             console.log(res)
             console.log(res.config)
             console.log(res.request)
             if (res.data.status == "ok") {
+                document.cookie="adminName="
+                document.cookie="adminPassword="
+                document.cookie="adminName="+this.form.name
+                document.cookie="adminPassword="+this.form.password
                 this.loading = false
                 alert("登录成功，您拥有管理员权限！")
                 this.$router.replace({
@@ -80,7 +84,7 @@ export default {
             this.loading = false
         })
       }
-  },
+  }
 }
 </script>
 

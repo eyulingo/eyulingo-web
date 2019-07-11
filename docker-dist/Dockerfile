@@ -3,13 +3,13 @@ FROM node:10
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY ./eyulingo-web/package*.json ./
+COPY ./eyulingo-dist/package*.json ./
 
 RUN npm install
 
 # Bundle app source
-COPY . .
+COPY ../eyulingo-dist/. .
 
-EXPOSE 8081 8082
+EXPOSE 8082
 
 CMD ["npm", "run serve"]

@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 
 export default {
   name: 'Login',
@@ -51,41 +52,38 @@ export default {
       submit:function(){
 
         this.loading = true
-        this.$router.replace({
-            path:'/distInfo'
+        let params = {distName:this.form.name, password:this.form.password}
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': "*"
+            }
+        }
+        axios.post('http://localhost:8080/store/login', params, axiosConfig).then((res)=>{
+            console.log(res)
+            console.log(res.config)
+            console.log(res.request)
+            if (res.data.status == "ok") {
+                let encoder = new TextEncoder("UTF-8")
+                let decoder = new TextDecoder("ISO-8859-1")
+                document.cookie="distName="
+                document.cookie="distPassword="
+                document.cookie="distName="+decoder.decode(encoder.encode(this.form.name))
+                document.cookie="distPassword="+this.form.password
+                this.loading = false
+                alert("登录成功，您好，"+this.form.name+"！")
+                this.$router.replace({
+                    path:'/distInfo'
+                })
+            }else{
+                this.loading = false
+                alert("登录失败")
+            }				
+        }).finally(()=>{
+            this.loading = false
         })
-        // let params = {'distName':this.form.name, 'password':this.form.password}
-        // let request = new Request('http://47.103.15.32:8080/store/login')
-        
-        // fetch(request, {
-        //     method: 'POST',
-        //     headers: {
-        //         'content-type': 'application/json;charset=UTF-8'
-        //     },
-        //     body: JSON.stringify(params)
-        // }).then((response)=>{
-        //     console.log(response)
-        //     return response.text()
-        // }).then((responseJson)=>{
-        //     //console.log(response.text())
-        //     console.log(responseJson)
-        //     var res = JSON.parse(responseJson)
-        //     if (res.status=="ok") {
-        //         this.loading = false
-        //         alert("登录成功,"+this.form.name+",您好！")
-        //         console.log(document.cookie)
-		// 		this.$router.replace({
-        //             path:'/home'
-        //         })
-        //     }else{
-        //         this.loading = false
-		// 		alert("登录失败")
-        //     }
-        // }).finally(()=>{
-        //     this.loading = false
-        // })
       }
-  },
+  }
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <el-container style="border: 1px solid #eee" direction="vertical">
     <el-header style="text-align: right; font-size: 12px">
-      <span>王小虎</span>
+      <span></span>
     </el-header>
 
     <el-container>

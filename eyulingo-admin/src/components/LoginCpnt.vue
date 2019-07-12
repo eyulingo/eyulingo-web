@@ -37,7 +37,7 @@
 
 import axios from 'axios'
 
-//axios.defaults.baseURL = "http://localhost:8080"
+axios.defaults.baseURL="http://localhost:8080"
 
 export default {
   name: 'Login',
@@ -62,7 +62,7 @@ export default {
                 'Access-Control-Allow-Origin': "*"
             }
         }
-        axios.post('http://localhost:8080/admin/login', params, axiosConfig).then((res)=>{
+        axios.post('/admin/login', params, axiosConfig).then((res)=>{
             console.log(res)
             console.log(res.config)
             console.log(res.request)

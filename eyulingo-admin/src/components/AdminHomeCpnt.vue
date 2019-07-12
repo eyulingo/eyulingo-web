@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
-//axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.baseURL = 'http://localhost:8080'
 
 var generateId = {
         _count: 1,
@@ -96,7 +96,7 @@ export default {
             },
             withCredentials: true,
             }
-            axios.post('http://localhost:8080/admin/logout',{} ,axiosConfig).then((res)=>{
+            axios.post('/admin/logout',{} ,axiosConfig).then((res)=>{
                 console.log(res.data)
                 document.cookie = "adminName="
                 document.cookie = "adminPassword="
@@ -114,7 +114,7 @@ export default {
         readMasterUser() {
             this.loading = true
 
-            axios.get('http://localhost:8080/admin/getstore', {
+            axios.get('/admin/getstore', {
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Access-Control-Allow-Origin': "*"
@@ -176,8 +176,11 @@ export default {
             }
             //是否是取消操作
             if (!cg) {
-                if (!this.master_user.sel.id) this.master_user.data.splice(index, 1);
-                return row.isSet = !row.isSet;
+                if (!this.master_user.sel.id) {
+                    row.isSet = !row.isSet;
+                    this.master_user.data.splice(index, 1, row);
+                }
+                return row.isSet
             }
             //提交数据
             if (row.isSet) {
@@ -205,7 +208,7 @@ export default {
                         endtime: row.endtime,
                         store_phone_nu: row.store_phone_nu
                     }
-                    axios.post('http://localhost:8080/admin/modifystore', params , axiosConfig). then((res)=>{
+                    axios.post('/admin/modifystore', params , axiosConfig). then((res)=>{
                         if (res.data.status=="ok") {
                             this.loading = false
                             alert("修改店铺信息成功！")
@@ -224,7 +227,7 @@ export default {
                         dist_phone_nu: row.dist_phone_nu,
                         password: row.password
                     }
-                    axios.post('http://localhost:8080/admin/modifydist', params, axiosConfig).then((res)=>{
+                    axios.post('/admin/modifydist', params, axiosConfig).then((res)=>{
                         if (res.data.status == "ok") {
                             this.loading = false
                             alert("修改经销商信息成功！")

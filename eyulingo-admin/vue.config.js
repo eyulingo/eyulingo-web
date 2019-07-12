@@ -1,12 +1,19 @@
 module.exports = {
-    publicPath:'./',
+    publicPath:'/',
     devServer: {
         
         host: 'localhost',
-        port: 8081,
+        
         https: false,
         hotOnly: false,
-        proxy: null, // 设置代理
+        // proxy: {
+        //     '/': {//请求称号
+        //     target: 'http://localhost:8081', //请求的接口
+        //     changeOrigin: true//允许跨域
+        //     
+        //     }
+        // },
         before: app => {}
-    }
+    },
+
 }

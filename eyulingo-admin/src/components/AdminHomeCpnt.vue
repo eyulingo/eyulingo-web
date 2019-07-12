@@ -46,7 +46,8 @@
 <script>
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:8080'
+//axios.defaults.baseURL="http://localhost:8081"
+axios.defaults.baseURL = 'http://47.103.15.32:8081'
 
 var generateId = {
         _count: 1,
@@ -66,7 +67,6 @@ export default {
                     { field: "address", title: "店铺地址"},
                     { field: "starttime", title: "营业开始时间", width: 220 },
                     { field: "endtime", title: "营业结束时间", width: 220 },
-                    //{ field: "store_image_id", title: "店铺图片地址", width: 180 },
                     { field: "store_phone_nu", title: "店铺手机号",width: 120 }
                 ],
                 columns_dist: [
@@ -74,8 +74,7 @@ export default {
                     { field: "location", title: "地理位置" },
                     { field: "truename", title: "真实姓名", width: 120 },
                     { field: "dist_phone_nu", title: "经销商联系方式", width: 120 },
-                    { field: "password", title: "密码", width: 120 },
-                    //{ field: "dist_image_id", title: "经销商图片", width: 180 },
+                    { field: "password", title: "密码", width: 120 }
                 ],
                 data: [],
             },
@@ -98,8 +97,8 @@ export default {
             }
             axios.post('/admin/logout',{} ,axiosConfig).then((res)=>{
                 console.log(res.data)
-                document.cookie = "adminName="
-                document.cookie = "adminPassword="
+                // document.cookie = "adminName="
+                // document.cookie = "adminPassword="
                 this.$router.replace({path:'/'})
             })
         },

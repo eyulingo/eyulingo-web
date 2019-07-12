@@ -35,7 +35,8 @@
 
 <script>
 import axios from 'axios'
-axios.defaults.baseURL="http://localhost:8080"
+//axios.defaults.baseURL="http://localhost:8080"
+axios.defaults.baseURL="http://47.103.15.32:8082"
 export default {
   name: 'Login',
   data () {
@@ -61,16 +62,16 @@ export default {
         }
         axios.post('/store/login', params, axiosConfig).then((res)=>{
             console.log(res)
-            console.log(res.config)
-            console.log(res.request)
+            //console.log(res.config)
+            //console.log(res.request)
             if (res.data.status == "ok") {
                 //let encoder = new TextEncoder("UTF-8")
                 //let decoder = new TextDecoder("ISO-8859-1")
-                document.cookie="distName="
-                document.cookie="distPassword="
-                document.cookie="distName="+this.form.name
+                //document.cookie="distName="
+                //document.cookie="distPassword="
+                //document.cookie="distName="+this.form.name
                 //decoder.decode(encoder.encode(this.form.name))
-                document.cookie="distPassword="+this.form.password
+                //document.cookie="distPassword="+this.form.password
                 this.loading = false
                 alert("登录成功，您好，"+this.form.name+"！")
                 this.$router.replace({

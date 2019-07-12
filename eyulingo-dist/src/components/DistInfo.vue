@@ -45,7 +45,8 @@
 
 <script>
 import axios from 'axios'
-axios.defaults.baseURL="http://localhost:8080"
+//axios.defaults.baseURL="http://localhost:8080"
+axios.defaults.baseURL="http://47.103.15.32:8082"
 export default {
     name: 'distInfo',
     data() {
@@ -61,7 +62,7 @@ export default {
                 data: [],
             },
             loading: false,
-            imageUrl: "",
+            imageUrl: ""
         }
     },
     created() {
@@ -117,7 +118,7 @@ export default {
               this.$message.error('上传头像图片大小不能超过 2MB!');
             }
             return isLt2M;
-        },
+        }, 
         //修改
         pwdChange(row, index, cg) {
             //是否是取消操作

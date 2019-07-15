@@ -1,70 +1,22 @@
-# eyulingo-dist
+# electron-test
 
-## Project setup
-```
+> An electron-vue project
+
+#### Build Setup
+
+``` bash
+# install dependencies
 npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# serve with hot reload at localhost:9080
+npm run dev
 
-### Compiles and minifies for production
-```
+# build electron application for production
 npm run build
+
+
 ```
 
-### Run your tests
-```
-npm run test
-```
+---
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your end-to-end tests
-```
-npm run test:e2e
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-# Summary of Dist
-
-> left guide bar
->
-> * dist info
-> * store info
-> * goods info
-> * orders
-
-> dist self info
->
-> * ```/store/profile```
-> * ```/store/modify```
-> * ```/store/avatar```
-
-
-> store info
-> 
-> * ```store/mystoreinfo```
-> * ```store/modifystoreinfo```
-> * ```/store/cover```
-
-> goods info
->
-> * ```store/goods```
-> * ```store/modifygood```
-> * ```store/addtag```
-> * 
-
-> orders
+This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[8fae476](https://github.com/SimulatedGREG/electron-vue/tree/8fae4763e9d225d3691b627e83b9e09b56f6c935) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).

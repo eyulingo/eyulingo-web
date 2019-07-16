@@ -8,12 +8,15 @@ import StoreInfo from '../components/StoreInfo.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
       name: 'login',
       component: Login
+    },
+    {
+      path: '*',
+      redirect: '/'
     },
     {
       path: '/home',

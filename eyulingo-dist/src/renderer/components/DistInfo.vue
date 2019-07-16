@@ -105,13 +105,13 @@ export default {
             axios.post('/store/avatar', params, axiosConfig).then((res)=>{
                 if (res.data.status=="ok") {
                     this.readMasterUser()
-                    this.$message('更新头像成功。')
+                    this.$message.success('更新头像成功。')
 
                 }else{
                     this.$message.error('更新头像失败。')
                 }
             })
-            this.$message('上传成功!');
+            this.$message.success('上传成功!');
         },
         beforeAvatarUpload(file) {
             const isLt2M = file.size / 1024 / 1024 < 2;
@@ -156,10 +156,10 @@ export default {
                 axios.post('/store/modifydist', params, axiosConfig).then((res)=>{
                     if (res.data.status=="ok") {
                         this.loading = false
-                        alert("修改成功！")
+                        this.$message.success("修改成功！")
                     }else{
                         this.loading = false
-                        alert("修改失败")
+                        this.$message.error("修改失败。")
                     }
                     this.loading = false
                 })

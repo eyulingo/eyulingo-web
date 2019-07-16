@@ -47,14 +47,37 @@
             <div v-if="!isChanging" class="text item">
                 {{master_user.data[0].delivery_method}}
             </div>
-            <el-select v-else v-model="value" placeholder="请选择">
+            <el-select v-else v-model="master_user.data[0].delivery_method" placeholder="请选择">
                 <el-option
                     v-for="item in deliver_options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                    :key="item.delivery_method"
+                    :label="item.delivery_method"
+                    :value="item.delivery_method">
                 </el-option>
             </el-select>
+        </el-card>
+        <el-divider></el-divider>
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>顾客评论</span>
+            </div>
+            <div style="display: block">
+                <el-card class="comment">
+                    <div slot="header" class="clearfix">
+                        <span>评论</span>
+                    </div>
+                </el-card>
+                <el-card class="comment">
+                    <div slot="header" class="clearfix">
+                        <span>评论</span>
+                    </div>
+                </el-card>
+                <el-card class="comment">
+                    <div slot="header" class="clearfix">
+                        <span>评论</span>
+                    </div>
+                </el-card>
+            </div>
         </el-card>
         <div class="el-table-add-row" style="width: 99.2%;" @click="readMasterUser()"><span>刷新</span></div>
     </div>
@@ -81,6 +104,7 @@ export default {
                 data: [],
             },
             deliver_options:[],
+            //deliver_method: '',
             loading: false,
             fit: 'cover',
             isChanging: false,
@@ -102,6 +126,14 @@ export default {
                 this.master_user.data.push(res.data)
                 this.imageUrl = "http://47.103.15.32:8080/img/download?fileId="+this.master_user.data[0].store_image_id
             })
+
+            axios.get('/store/getalldelivery', {
+                withCredentials: true
+            }).then((res)=>{
+                console.log(res.data)
+                this.deliver_options = res.data
+            })
+
             this.loading = false
             console.log(this.master_user.data)
 
@@ -127,12 +159,12 @@ export default {
             axios.post('/store/cover', params, axiosConfig).then((res)=>{
                 if (res.data.status=="ok") {
                     this.readMasterUser()
-                    this.$message('更新封面成功。')
+                    this.$message.success('更新封面成功。')
                 }else{
                     this.$message.error('更新封面失败。')
                 }
             })
-            this.$message('上传成功!');
+            this.$message.success('上传成功!');
         },
         beforeAvatarUpload(file) {
             const isLt2M = file.size / 1024 / 1024 < 2;
@@ -178,10 +210,10 @@ export default {
                 axios.post('/store/modifystoreinfo', params, axiosConfig).then((res)=>{
                     if (res.data.status=="ok") {
                         this.loading = false
-                        alert("修改成功！")
+                        this.$message.success("修改成功！")
                     }else{
                         this.loading = false
-                        alert("修改失败")
+                        this.$message.error("修改失败.")
                     }
                 })
                 this.readMasterUser()
@@ -203,8 +235,22 @@ export default {
 
             if (this.isChanging) {
                 this.isChanging = !this.isChanging
+                //console.log(this.master_user.data[0].delivery_method)
+                //console.log("if")
+                // 保存
+                axios.post('/store/setdefaultdelivery', {
+                    delivery: this.master_user.data[0].delivery_method
+                }).then((res)=>{
+                    if (res.data.status=="ok") {
+                        this.$message.success("保存成功！")
+                    }else{
+                        this.$message.error("保存失败。")
+                        this.readMasterUser()
+                    }
+                })
             }else{
                 this.isChanging = !this.isChanging
+                //console.log(this.master_user.data[0].delivery_method)
             }
         }
     }
@@ -253,7 +299,13 @@ export default {
 }
 .box-card {
   margin-top: 10px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
 }
-
+.comment {
+    margin: 5px;
+    float: left;
+    width: 300px;
+}
 
 </style>

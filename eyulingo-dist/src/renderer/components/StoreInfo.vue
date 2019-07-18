@@ -8,9 +8,10 @@
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"> 
-            <el-avatar v-if="imageUrl" class="avatar" shape="square" :size="178" :fit="fit" :src="imageUrl"></el-avatar>
+            <img v-if="imageUrl" class="avatar" :src="imageUrl" :style="styleMode">
             <img v-else src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png" class="avatar">
         </el-upload>
+        <!-- ========================== -->
         <el-row>
             <el-col :span="24">
                 <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">
@@ -38,6 +39,7 @@
                 </el-table>
             </el-col>
         </el-row>
+        <!-- ========================== -->
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span>默认配送方式</span>
@@ -56,6 +58,7 @@
                 </el-option>
             </el-select>
         </el-card>
+        <!-- ========================== -->
         <el-divider></el-divider>
         <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -104,17 +107,28 @@ export default {
                 data: [],
             },
             deliver_options:[],
-            //deliver_method: '',
+            old_delivery_method: '',
             loading: false,
-            fit: 'cover',
             isChanging: false,
-            imageUrl: ""
+            imageUrl: "",
+            styleMode: {
+                height: '200px',
+                width: '200px'
+            }
         }
     },
     created() {
         this.readMasterUser()
     },
     methods: {
+        getImg(src, vue) {
+            var img = new Image()
+            img.src = src
+            img.onload = function () {
+                vue.styleMode.height = Math.ceil(this.height/this.width * 460)+'px'
+                vue.styleMode.width = '460px'
+            }
+        },
         readMasterUser() {
             this.loading = true
             this.imageUrl = ""
@@ -125,6 +139,7 @@ export default {
                 this.master_user.data = []
                 this.master_user.data.push(res.data)
                 this.imageUrl = "http://47.103.15.32:8080/img/download?fileId="+this.master_user.data[0].store_image_id
+                this.getImg(this.imageUrl, this)
             })
 
             axios.get('/store/getalldelivery', {
@@ -136,13 +151,6 @@ export default {
 
             this.loading = false
             console.log(this.master_user.data)
-
-            this.master_user.data.map(i => {
-                i.id = 0;//模拟后台插入成功后有了id
-                i.isSet=false;//给后台返回数据添加`isSet`标识
-                i._temporary = true
-                return i;
-            });
         },
         //添加账号
         handleAvatarSuccess(response){
@@ -230,6 +238,13 @@ export default {
         deliveChange(change) {
             if (!change) {
                 this.isChanging = !this.isChanging
+
+                console.log(this.master_user.data[0].delivery_method)
+                let newData = this.master_user.data[0]
+                newData.delivery_method = this.old_delivery_method
+                this.master_user.data.splice(0, 1, newData)
+                console.log(this.master_user.data[0].delivery_method)
+
                 return this.isChanging
             }
 
@@ -249,8 +264,9 @@ export default {
                     }
                 })
             }else{
+                this.old_delivery_method = this.master_user.data[0].delivery_method
                 this.isChanging = !this.isChanging
-                //console.log(this.master_user.data[0].delivery_method)
+                console.log(this.master_user.data[0].delivery_method)
             }
         }
     }
@@ -274,14 +290,11 @@ export default {
     border-radius: 15px;
     cursor: pointer;
     position: relative;
-    overflow: hidden;
 }
 .avatar-uploader .el-upload:hover {
   border-color: #409EFF;
 }
 .avatar {
-  width: 178px;
-  height: 178px;
   display: block;
 }.text {
   font-size: 14px;

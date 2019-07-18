@@ -9,7 +9,7 @@
         <el-menu router default-active="/distInfo">
           <el-menu-item index="/distInfo">我的信息</el-menu-item>
           <el-menu-item index="/storeInfo">我的店铺</el-menu-item>
-          <el-menu-item index="3">商品信息</el-menu-item>
+          <el-menu-item index="/goodsInfo">商品信息</el-menu-item>
           <el-menu-item index="4">我的订单</el-menu-item>
         </el-menu>
       </el-aside>

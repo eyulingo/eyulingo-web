@@ -83,13 +83,6 @@ export default {
                 this.loading = false
             })
             console.log(this.master_user.data)
-
-            this.master_user.data.map(i => {
-                i.id = 0;//模拟后台插入成功后有了id
-                i.isSet=false;//给后台返回数据添加`isSet`标识
-                i._temporary = true
-                return i;
-            });
         },
         handleAvatarSuccess(response){
             console.log(response)

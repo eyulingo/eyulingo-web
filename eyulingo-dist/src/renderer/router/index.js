@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/LoginView.vue'
 import DistInfo from '../components/DistInfo.vue'
 import StoreInfo from '../components/StoreInfo.vue'
+import GoodsInfo from '../components/GoodsInfo.vue'
 
 Vue.use(Router)
 
@@ -32,6 +33,11 @@ export default new Router({
           path: '/storeInfo',
           name: 'storeInfo',
           component: StoreInfo
+        },
+        {
+          path: '/goodsInfo',
+          name: 'goodsInfo',
+          component: GoodsInfo
         }
       ]
       // route level code-splitting

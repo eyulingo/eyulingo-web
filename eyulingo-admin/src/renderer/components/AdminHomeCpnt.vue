@@ -145,7 +145,7 @@ export default {
                      "password":"", "dist_image_id": "", "store_phone_nu": "",
                      "isSet": true, "_temporary": true };
             this.master_user.data.push(j);
-            this.master_user.sel = JSON.parse(JSON.stringify(j));
+            this.master_user.sel = JSON.parse(JSON.stringify(j))
         },
         //删除
         deleteMasterUser(index) {

@@ -5,12 +5,12 @@
     </el-header>
 
     <el-container>
-      <el-aside style="width: 300px; background-color: rgb(238, 241, 246)">
+      <el-aside style="width: 200px; background-color: rgb(238, 241, 246)">
         <el-menu router default-active="/distInfo">
           <el-menu-item index="/distInfo">我的信息</el-menu-item>
           <el-menu-item index="/storeInfo">我的店铺</el-menu-item>
           <el-menu-item index="/goodsInfo">商品信息</el-menu-item>
-          <el-menu-item index="4">我的订单</el-menu-item>
+          <el-menu-item index="/orderInfo">我的订单</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>

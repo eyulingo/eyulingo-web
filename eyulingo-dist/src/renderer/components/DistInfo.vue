@@ -166,6 +166,15 @@ export default {
                 row.isSet = true;
                 this.master_user.data.splice(index, 1, row)
             }
+        },
+        dist_logout() {
+            axios.post('/logout', {}).then((res)=>{
+                if (res.data.status=="ok") {
+                    this.$router.replace({
+                        path:'/'
+                    })
+                }
+            })
         }
     }
 }

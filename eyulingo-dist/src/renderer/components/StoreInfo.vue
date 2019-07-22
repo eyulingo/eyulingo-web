@@ -28,10 +28,10 @@
                     </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,true)">
+                            <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope,scope.row,scope.$index,true)">
                                 {{scope.row.isSet?"保存":"修改"}}
                             </span>
-                            <span v-if="scope.row.isSet" class="el-tag  el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,false)">
+                            <span v-if="scope.row.isSet" class="el-tag  el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope,scope.row,scope.$index,false)">
                                 取消
                             </span>
                         </template>
@@ -183,8 +183,9 @@ export default {
             return isLt2M;
         },
         //修改
-        pwdChange(row, index, cg) {
+        pwdChange(scope,row, index, cg) {
             //是否是取消操作
+            console.log(scope)
             if (!cg) {
                 if (!this.master_user.sel.id) {
                     row.isSet = !row.isSet;
@@ -268,6 +269,15 @@ export default {
                 this.isChanging = !this.isChanging
                 console.log(this.master_user.data[0].delivery_method)
             }
+        },
+        dist_logout() {
+            axios.post('/logout', {}).then((res)=>{
+                if (res.data.status=="ok") {
+                    this.$router.replace({
+                        path:'/'
+                    })
+                }
+            })
         }
     }
 }

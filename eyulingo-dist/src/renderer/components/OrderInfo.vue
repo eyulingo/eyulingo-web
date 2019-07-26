@@ -61,7 +61,7 @@
                 <div v-if="order.rated==true">
                     <el-card class="comment_card">
                         <div slot="header" class="clearfix">
-                            <span>简评</span>
+                            <span>用户评价</span>
                            <el-rate
                                 :value="order.star_count"
                                 disabled

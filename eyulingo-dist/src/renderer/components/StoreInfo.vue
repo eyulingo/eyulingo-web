@@ -65,21 +65,22 @@
                 <span>顾客评论</span>
             </div>
             <div style="display: block">
-                <el-card class="comment">
+                <el-card class="comment" v-for="comment in master_user.data[0].comments">
                     <div slot="header" class="clearfix">
-                        <span>评论</span>
+                        <span>{{comment.username}} 的评价</span>
+                        <el-rate
+                                :value="comment.star_count"
+                                disabled
+                                show-score
+                                text-color="#ff9900"
+                                score-template="{value}">
+                        </el-rate>
                     </div>
+                    <span style="word-break: break-all; word-wrap: break-word">
+                            {{comment.comment_content}}
+                        </span>
                 </el-card>
-                <el-card class="comment">
-                    <div slot="header" class="clearfix">
-                        <span>评论</span>
-                    </div>
-                </el-card>
-                <el-card class="comment">
-                    <div slot="header" class="clearfix">
-                        <span>评论</span>
-                    </div>
-                </el-card>
+
             </div>
         </el-card>
         <div class="el-table-add-row" style="width: 99.2%;" @click="readMasterUser()"><span>刷新</span></div>

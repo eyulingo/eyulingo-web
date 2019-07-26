@@ -3,9 +3,11 @@
         <el-card v-for="order in orders" :key="order.bill_id" class="box-card">
             <el-form :model="order" label-width="90px">   
                 <el-form-item v-for="column in columns" :key="column.field" :label="column.title" style="text-align: left">
-                    <span v-if="column.field!='order_status'">
-                        {{order[column.field]}}
-                    </span>
+                    <div v-if="column.field!='order_status'">
+                        <span>
+                            {{order[column.field]}}
+                        </span>
+                    </div>
                     <div v-else>
                         <el-select v-if="order.isChanging==true" v-model="order[column.field]">
                             <el-option
@@ -27,6 +29,7 @@
                         </el-button>
                     </div>
                 </el-form-item>
+                
                 <el-form-item label="订单明细" style="text-align: left"></el-form-item>
                 <el-table :data="order.goods" border style="width: 90%" highlight-current-row>
                     <el-table-column v-for="column in goodColumn" 
@@ -44,6 +47,24 @@
                         </template>
                     </el-table-column>
                 </el-table>
+
+                <div v-if="order.rated==true">
+                    <el-card class="comment_card">
+                        <div slot="header" class="clearfix">
+                            <span>简评</span>
+                           <el-rate
+                                :value="order.star_count"
+                                disabled
+                                show-score
+                                text-color="#ff9900"
+                                score-template="{value}">
+                            </el-rate>
+                        </div>
+                        <span style="word-break: break-all; word-wrap: break-word">
+                            {{order.comment_content}}
+                        </span>
+                    </el-card>
+                </div>
             </el-form>
         </el-card>
     </div>
@@ -64,7 +85,8 @@ export default {
                 { field: "receiver_phone", title: "收货电话： " },
                 { field: "receiver_address", title: "收货地址： " },
                 { field: "transport_method", title: "配送方式： " },
-                { field: "order_status", title: "订单状态： " }
+                { field: "order_status", title: "订单状态： " },
+
             ],
             orderStatus:[
                 { field: "unpurchased", title: "未支付" },
@@ -227,6 +249,12 @@ export default {
   }
   .clearfix:after {
     clear: both;
+  }
+  
+  .comment_card {
+    margin-top: 30px; 
+    width: 480px;
+    text-align: left;
   }
 
 </style>

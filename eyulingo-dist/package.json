@@ -1,12 +1,12 @@
 {
-  "name": "electron-test",
+  "name": "eyulingo-dist",
   "version": "0.0.1",
-  "author": "yuetsin <akaza_akari@sjtu.edu.cn>",
+  "author": "ddyasmile <1271569621@qq.com>",
   "description": "An electron-vue project",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder",
+    "build": "node .electron-vue/build.js && electron-builder ",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
@@ -17,7 +17,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "electron-test",
+    "productName": "eyulingo-dist",
     "appId": "io.github.eyulingo",
     "directories": {
       "output": "build"

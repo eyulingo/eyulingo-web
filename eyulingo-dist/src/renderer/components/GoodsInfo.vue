@@ -28,11 +28,18 @@
                                         <img v-else src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png" class="picture">
                                     </el-upload>
                                 </span>
-                                <span v-else-if="v.field=='tags'">
-                                    <TagsBox 
+                                <span v-else-if="v.field=='tags' && !scope.row.isSet">
+                                    <TagsBox
                                         :tags="scope.row.tags"
                                         :goodId="scope.row.id">
                                     </TagsBox>
+                                </span>
+
+                                <span v-else-if="v.field=='tags' && scope.row.isSet">
+                                    <ReadOnlyTagsBox
+                                            :tags="scope.row.tags"
+                                            :goodId="scope.row.id">
+                                    </ReadOnlyTagsBox>
                                 </span>
                                 <span v-else-if="!scope.row.isSet">
                                     {{scope.row[v.field]}}
@@ -72,11 +79,13 @@
 <script>
 import TagsBox from './TagsBox.vue'
 import axios from 'axios'
+import ReadOnlyTagsBox from "./ReadOnlyTagsBox";
 //axios.defaults.baseURL="http://localhost:8080"
 axios.defaults.baseURL="http://47.103.15.32:8082"
 export default {
     name: 'goodsInfo',
     components: {
+        ReadOnlyTagsBox,
         TagsBox
     },
     data() {

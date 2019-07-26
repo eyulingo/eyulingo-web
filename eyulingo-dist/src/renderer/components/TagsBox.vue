@@ -17,7 +17,7 @@
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm">
         </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 贴标签</el-button>
     </div>
 </template>
 

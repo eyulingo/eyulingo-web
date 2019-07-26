@@ -3,7 +3,19 @@
         <el-card v-for="order in orders" :key="order.bill_id" class="box-card">
             <el-form :model="order" label-width="90px">   
                 <el-form-item v-for="column in columns" :key="column.field" :label="column.title" style="text-align: left">
-                    <span v-if="column.field!='order_status'">
+                    <span v-if="column.field!=='order_status' && column.field!=='comment_content' && column.field!=='star_count'">
+                        {{order[column.field]}}
+                    </span>
+                    <span v-else-if="column.field==='star_count' && !order['rated']">
+                        {{"尚未评价"}}
+                    </span>
+                    <span v-else-if="column.field==='comment_content' && !order['rated']">
+                        {{"尚未评价"}}
+                    </span>
+                    <span v-else-if="column.field==='star_count' && order['rated']">
+                        {{ order[column.field] + "分"}}
+                    </span>
+                    <span v-else-if="column.field==='comment_content' && order['rated']">
                         {{order[column.field]}}
                     </span>
                     <div v-else>
@@ -64,7 +76,9 @@ export default {
                 { field: "receiver_phone", title: "收货电话： " },
                 { field: "receiver_address", title: "收货地址： " },
                 { field: "transport_method", title: "配送方式： " },
-                { field: "order_status", title: "订单状态： " }
+                { field: "order_status", title: "订单状态： " },
+                { field: "star_count", title: "用户评分： " },
+                { field: "comment_content", title: "评价内容： " }
             ],
             orderStatus:[
                 { field: "unpurchased", title: "未支付" },

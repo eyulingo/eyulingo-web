@@ -1,8 +1,8 @@
 {
-  "name": "electron-test",
-  "version": "0.0.1",
+  "name": "Eyulingo Admin",
+  "version": "1.0.0",
   "author": "yuetsin <akaza_akari@sjtu.edu.cn>",
-  "description": "An electron-vue project",
+  "description": "Eyulingo 管理员管理 App。",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -17,8 +17,8 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "electron-test",
-    "appId": "io.github.eyulingo",
+    "productName": "Eyulingo Admin",
+    "appId": "io.github.admin.eyulingo",
     "directories": {
       "output": "build"
     },

@@ -100,7 +100,7 @@
         methods: {
             readMasterUser() {
                 this.loading = true
-                axios.get('/admin/goods?store_id=' + this.GLOBAL.store_id, {withCredentials: true}).then((res)=>{
+                axios.get('/admin/getgoods?store_id=' + this.GLOBAL.store_id, {withCredentials: true}).then((res)=>{
                     console.log(res.data)
                     this.master_user.data = []
                     res.data.values.forEach((element)=>{

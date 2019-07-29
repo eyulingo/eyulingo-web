@@ -8,7 +8,7 @@
             <el-col :span="24">
                 <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">
                     
-                    <el-table-column v-for="v in is_store?master_user.columns_store:master_user.columns_dist" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
+                    <el-table-column v-for="v in is_store?master_user.columns_store:master_user.columns_dist" :key="v.field" :prop="v.field" :label="v.title" :width="v.width">
                         <template slot-scope="scope">
                             <span v-if="v.field=='store_id'">{{scope.row[v.field]}}</span>
                             <span v-else-if="scope.row.isSet">

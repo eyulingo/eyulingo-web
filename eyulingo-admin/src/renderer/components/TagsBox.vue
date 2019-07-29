@@ -23,7 +23,7 @@
 
 <script>
     import axios from 'axios'
-    axios.defaults.baseURL="http://47.103.15.32:8082"
+    axios.defaults.baseURL="http://47.103.15.32:8081"
     export default {
         name: 'tagsBox',
         props: {

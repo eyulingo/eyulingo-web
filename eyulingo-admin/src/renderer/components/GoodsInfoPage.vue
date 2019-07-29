@@ -4,7 +4,7 @@
         <el-row>
             <el-col :span="24">
                 <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">
-                    <el-table-column v-for="v in master_user.columns_good" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
+                    <el-table-column @click="getGoodsInStore(scope.$index)" v-for="v in master_user.columns_good" :key="v.filed" :prop="v.field" :label="v.title" :width="v.width">
                         <template slot-scope="scope">
 
                                 <span v-if="v.field=='id'">
@@ -34,7 +34,6 @@
                                             :goodId="scope.row.id">
                                     </TagsBox>
                                 </span>
-
                             <span v-else-if="v.field=='tags' && scope.row.isSet">
                                     <ReadOnlyTagsBox
                                             :tags="scope.row.tags"
@@ -51,23 +50,7 @@
 
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" width="110">
-                        <template slot-scope="scope" @click="getGoodsInStore(scope.$index)">
-                            <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,true)">
-                                {{scope.row.isSet?"保存":"修改"}}
-                            </span>
-                            <span v-if="!scope.row.isSet" class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="deleteMasterUser(scope.$index)">
-                                删除
-                            </span>
-                            <span v-else class="el-tag  el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,false)">
-                                取消
-                            </span>
-                        </template>
-                    </el-table-column>
                 </el-table>
-            </el-col>
-            <el-col :span="24">
-                <div class="el-table-add-row" style="width: 99.2%;" @click="addMasterUser()"><span>+ 添加</span></div>
             </el-col>
             <el-col :span="24">
                 <div class="el-table-add-row" style="width: 99.2%;" @click="readMasterUser()"><span>刷新</span></div>
@@ -81,7 +64,7 @@
     import axios from 'axios'
     import ReadOnlyTagsBox from "./ReadOnlyTagsBox";
     //axios.defaults.baseURL="http://localhost:8080"
-    axios.defaults.baseURL="http://47.103.15.32:8082"
+    axios.defaults.baseURL="http://47.103.15.32:8081"
     export default {
         name: 'goodsInfo',
         components: {
@@ -210,6 +193,10 @@
                 this.master_user.data.push(newGood)
                 this.master_user.sel = JSON.parse(JSON.stringify(newGood))
                 console.log(this.master_user.data)
+            },
+            getGoodsInStore(index) {
+                this.GLOBAL.store_id = index
+                this.$router.push('/goods')
             },
             deleteMasterUser(index) {
                 for (let i of this.master_user.data) {

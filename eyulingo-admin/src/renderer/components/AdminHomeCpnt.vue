@@ -81,7 +81,6 @@ export default {
             loading: false,
             is_store: true
         }
-
     },
     created () {
         this.readMasterUser()

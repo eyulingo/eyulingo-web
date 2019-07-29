@@ -6,6 +6,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 import './styles.scss'
+import global_ from './components/Global'
+Vue.prototype.GLOBAL = global_;
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 

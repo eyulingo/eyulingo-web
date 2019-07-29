@@ -20,6 +20,9 @@
                     </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
+                            <span v-if="!scope.row.isSet" class="el-tag el-tag--mini" style="cursor: pointer;" @click="getGoodsInStore(scope.row['store_id'])">
+                                商品
+                            </span>
                             <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;" @click="pwdChange(scope.row,scope.$index,true)">
                                 {{scope.row.isSet?"保存":"修改"}}
                             </span>
@@ -161,6 +164,10 @@ export default {
 
             //this.master_user.data.splice(index, 1);
             //this.master_user.sel = null;
+        },
+        getGoodsInStore(index) {
+            this.GLOBAL.store_id = index
+            this.$router.push('/goods')
         },
         //修改
         pwdChange(row, index, cg) {

@@ -55,6 +55,9 @@
             <el-col :span="24">
                 <div class="el-table-add-row" style="width: 99.2%;" @click="readMasterUser()"><span>刷新</span></div>
             </el-col>
+            <el-col :span="24">
+                <div class="el-table-add-row" style="width: 99.2%;" @click="goBack()"><span>返回</span></div>
+            </el-col>
         </el-row>
     </div>
 </template>
@@ -194,10 +197,6 @@
                 this.master_user.sel = JSON.parse(JSON.stringify(newGood))
                 console.log(this.master_user.data)
             },
-            getGoodsInStore(index) {
-                this.GLOBAL.store_id = index
-                this.$router.push('/goods')
-            },
             deleteMasterUser(index) {
                 for (let i of this.master_user.data) {
                     if (i.isSet) {
@@ -246,6 +245,9 @@
                 })
 
 
+            },
+            goBack() {
+                this.$router.push('/admin')
             },
             pwdChange(row, index, cg) {
                 for (let i of this.master_user.data) {

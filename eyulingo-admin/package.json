@@ -17,7 +17,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "Eyulingo Admin",
+    "productName": "Eyulingo 管理员",
     "appId": "io.github.admin.eyulingo",
     "directories": {
       "output": "build"

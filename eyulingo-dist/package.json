@@ -1,8 +1,8 @@
 {
   "name": "eyulingo-dist",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "ddyasmile <1271569621@qq.com>",
-  "description": "An electron-vue project",
+  "description": "Eyulingo 经销商。",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -17,8 +17,8 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "eyulingo-dist",
-    "appId": "io.github.eyulingo",
+    "productName": "Eyulingo 经销商",
+    "appId": "io.github.dist.eyulingo",
     "directories": {
       "output": "build"
     },

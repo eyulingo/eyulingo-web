@@ -1,6 +1,29 @@
 <template>
     <div v-loading="loading">
         <el-card v-for="order in orders" :key="order.bill_id" class="box-card">
+            <div slot="header">
+                <el-alert
+                    v-if="order.order_status=='received'"
+                    :title="cnStatus[order.bill_id]"
+                    type="success"
+                    effect="dark"
+                    :closable="false">
+                </el-alert>
+                <el-alert
+                    v-else-if="order.order_status=='transporting'"
+                    :title="cnStatus[order.bill_id]"
+                    type="info"
+                    effect="dark"
+                    :closable="false">
+                </el-alert>
+                <el-alert
+                    v-else-if="order.order_status=='pending'"
+                    :title="cnStatus[order.bill_id]"
+                    type="warning"
+                    effect="dark"
+                    :closable="false">
+                </el-alert>
+            </div>
             <el-form :model="order" label-width="90px">   
                 <el-form-item v-for="column in columns" :key="column.field" :label="column.title" style="text-align: left">
                     <span v-if="column.field!=='order_status' && column.field!=='comment_content' && column.field!=='star_count'">
@@ -19,23 +42,12 @@
                         {{order[column.field]}}
                     </span>
                     <div v-else>
-                        <el-select v-if="order.isChanging==true" v-model="order[column.field]">
-                            <el-option
-                                v-for="item in orderStatus" :key="item.field"
-                                :label="item.title" :value="item.field">
-                            </el-option>
-                        </el-select>
-                        <span v-else>{{cnStatus[order.bill_id]}}</span>
+                        <span>{{cnStatus[order.bill_id]}}</span>
                         <el-button 
-                            @click="statusChange(order, true)"
+                            v-if="order.order_status=='pending'"
+                            @click="statusChange(order)"
                             style="margin-left: 10px">
-                            {{order.isChanging?"保存":"修改订单状态"}}
-                        </el-button>
-                        <el-button 
-                            v-if="order.isChanging"
-                            @click="statusChange(order, false)"
-                            style="margin-left: 10px">
-                            取消
+                            发货
                         </el-button>
                     </div>
                 </el-form-item>
@@ -163,27 +175,31 @@ export default {
                 console.log(res.data.values)
                 if (res.data.status=="ok") {
                     var orders = res.data.values
-                    orders.forEach((element)=>{
-                        element.isChanging = false
-                        element.styleModeList = []
-                        element.goods.forEach((ele, index, arr)=>{
-                            if (index==0) {
-                                let len = arr.length
-                                while(len>0) {
-                                    let styleMode = {}
-                                    element.styleModeList.push(styleMode)
-                                    len--
+                    orders.forEach((element, index, arr)=>{
+                        if (element.order_status!="unpurchased"&&
+                            element.order_status!="invalid") {
+                            element.styleModeList = []
+                            element.goods.forEach((ele, index, arr)=>{
+                                if (index==0) {
+                                    let len = arr.length
+                                    while(len>0) {
+                                        let styleMode = {}
+                                        element.styleModeList.push(styleMode)
+                                        len--
+                                    }
                                 }
-                            }
-                            var img = new Image()
-                            img.src = 'http://47.103.15.32:8080/img/download?fileId='+ele.image_id
-                            img.onload = function () {
-                                var styleMode = {}
-                                styleMode.height = Math.ceil(img.height/img.width*300)+'px'
-                                styleMode.width = '300px'
-                                element.styleModeList.splice(index, 1, styleMode)
-                            }
-                        })
+                                var img = new Image()
+                                img.src = 'http://47.103.15.32:8080/img/download?fileId='+ele.image_id
+                                img.onload = function () {
+                                    var styleMode = {}
+                                    styleMode.height = Math.ceil(img.height/img.width*300)+'px'
+                                    styleMode.width = '300px'
+                                    element.styleModeList.splice(index, 1, styleMode)
+                                }
+                            })
+                        }else{
+                            arr.splice(index, 1)
+                        }
                     })
                     this.orders = orders
                     this.loading = false
@@ -193,17 +209,14 @@ export default {
                 }
             })
         },
-        statusChange(order, falg) {
-            if (!falg) {
-                if (order.last_status) {
-                    order.order_status = order.last_status
-                }
-                order.last_status = null
-                order.isChanging = !order.isChanging
-                return flag
-            }
+        statusChange(order) {
 
-            if (order.isChanging) {
+            this.$confirm('请问您确认要发货吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                console.log(order)
                 let axiosConfig = {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8',
@@ -213,21 +226,23 @@ export default {
                 }
                 let params = {
                     id: order.bill_id,
-                    status: order.order_status
+                    status: "transporting"
                 }
                 console.log(params)
                 axios.post('/store/setorder', params, axiosConfig).then((res)=>{
                     if (res.data.status=="ok") {
-                        this.$message.success("修改订单状态成功。")
+                        this.$message.success("发货成功。")
                     }else{
-                        this.$message.error("修改订单状态失败。")
+                        this.$message.error("发货失败。")
                     }
                 })
-                order.isChanging = !order.isChanging
-            }else{
-                order.last_status = order.order_status
-                order.isChanging = !order.isChanging
-            }
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                })          
+            })
+            this.readOrders()
         },
         dist_logout() {
             axios.post('/logout', {}).then((res)=>{

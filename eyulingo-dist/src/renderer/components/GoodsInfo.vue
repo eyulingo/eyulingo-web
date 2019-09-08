@@ -1,6 +1,5 @@
 <template>
     <div>
-        
         <el-row>
             <el-col :span="24">
                 <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row v-loading="loading">

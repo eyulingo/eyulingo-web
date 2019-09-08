@@ -11,6 +11,7 @@
           <el-menu-item index="/storeInfo">我的店铺</el-menu-item>
           <el-menu-item index="/goodsInfo">商品信息</el-menu-item>
           <el-menu-item index="/orderInfo">我的订单</el-menu-item>
+          <el-menu-item index="/xiaoshou">销售统计</el-menu-item>
           <el-menu-item @click="dist_logout()" index="/">退出登录</el-menu-item>
         </el-menu>
       </el-aside>

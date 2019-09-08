@@ -6,6 +6,7 @@ import DistInfo from '../components/DistInfo.vue'
 import StoreInfo from '../components/StoreInfo.vue'
 import GoodsInfo from '../components/GoodsInfo.vue'
 import OrderInfo from '../components/OrderInfo.vue'
+import Xiaoshou from '../components/Xiaoshou.vue'
 
 Vue.use(Router)
 
@@ -44,6 +45,11 @@ export default new Router({
           path: '/orderInfo',
           name: 'orderInfo',
           component: OrderInfo
+        },
+        {
+          path:'/xiaoshou',
+          name:'xiaoshou',
+          component: Xiaoshou
         }
       ]
       // route level code-splitting
